@@ -9,6 +9,17 @@ class LcshPlugin
         $db = get_db();
         $dcSubject = $db->getTable('Element')->findByElementSetNameAndElementName('Dublin Core', 'Subject');
 ?>
+<style type="text/css">
+    .lcsh-suggest {
+        overflow: auto;
+        height: 200px;
+        width: 420px;
+        border: 1px solid #D0D0D0;
+    }
+    .lcsh-suggestion:hover {
+        background-color: #D0D0D0;
+    }
+</style>
 <script type="text/javascript" charset="utf-8">
 // Observe any keyup events from all Dublin Core:Subject form inputs.
 document.observe('omeka:elementformload', function(e) {
@@ -25,24 +36,24 @@ document.observe('omeka:elementformload', function(e) {
                 onSuccess: function(transport, json) {
                     // Remove the suggest div if there are no suggestions.
                     if (0 == json[1].length) {
-                        $(input.id + '-suggest').remove(html);
+                        $(input.id + '-lcsh-suggest').remove();
                         return;
                     }
                     // Insert the suggest div if it doesn't already exist.
-                    if (!$(input.id + '-suggest')) {
-                        var suggestDiv = new Element('div', {id: input.id + '-suggest', style: 'overflow:auto;height:200px;width:420px;border:1px solid #D0D0D0;'});
+                    if (!$(input.id + '-lcsh-suggest')) {
+                        var suggestDiv = new Element('div', {id: input.id + '-lcsh-suggest', class: 'lcsh-suggest'});
                         input.insert({after: suggestDiv});
                     }
                     // Update the suggest div with the suggestion HTML.
                     var html = '<ul>';
                     for(var i = 0; i < json[1].length; i++) {
-                        html += '<li onclick="$(\'' + input.id + '\').setValue(\'' + json[1][i] + '\');$(\'' + input.id + '-suggest\').remove()">' + json[1][i] + '</li>';
+                        html += '<li class="lcsh-suggestion" onclick="$(\'' + input.id + '\').setValue(\'' + json[1][i] + '\');$(\'' + input.id + '-lcsh-suggest\').remove()">' + json[1][i] + '</li>';
                     }
                     html += '</ul>';
-                    $(input.id + '-suggest').update(html);
+                    $(input.id + '-lcsh-suggest').update(html);
                 },
                 onFailure: function() {
-                    //alert('failure');
+                    return;
                 }
             })
         })
@@ -55,6 +66,10 @@ document.observe('omeka:elementformload', function(e) {
     public static function filterDcSubject($html, $inputNameStem, $value, 
                                            $options, $record, $element)
     {
-        return __v()->formText($inputNameStem . '[text]', $value, array('size' => '50'));
+        // Must include autocomplete="off"
+        // See: // http://www.selfcontained.us/2009/01/23/browser-autocomplete-and-keyup-events/
+        return __v()->formText($inputNameStem . '[text]', 
+                               $value, 
+                               array('size' => '50', 'autocomplete' => 'off'));
     }
 }
