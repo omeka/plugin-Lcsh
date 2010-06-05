@@ -21,6 +21,11 @@ class LcshPlugin
     }
 </style>
 <script type="text/javascript" charset="utf-8">
+// Handle the click event for a suggestion.
+function lcshSuggestion(inputId, suggestion) {
+    $('' + inputId + '').setValue(unescape('' + suggestion + ''));
+    $('' + inputId + '-lcsh-suggest').remove()
+}
 // Observe any keyup events from all Dublin Core:Subject form inputs.
 document.observe('omeka:elementformload', function(e) {
     $$('#element-<?php echo $dcSubject->id; ?> input[type="text"]').each(function(input) {
@@ -47,7 +52,7 @@ document.observe('omeka:elementformload', function(e) {
                     // Update the suggest div with the suggestion HTML.
                     var html = '<ul>';
                     for(var i = 0; i < json[1].length; i++) {
-                        html += '<li class="lcsh-suggestion" onclick="$(\'' + input.id + '\').setValue(\'' + json[1][i] + '\');$(\'' + input.id + '-lcsh-suggest\').remove()">' + json[1][i] + '</li>';
+                        html += '<li class="lcsh-suggestion" onclick="lcshSuggestion(\''+ input.id + '\', \'' + escape(json[1][i]) + '\')">' + json[1][i] + '</li>';
                     }
                     html += '</ul>';
                     $(input.id + '-lcsh-suggest').update(html);
