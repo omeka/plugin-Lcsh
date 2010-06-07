@@ -23,8 +23,8 @@ class LcshPlugin
 <script type="text/javascript" charset="utf-8">
 // Handle the click event for a suggestion.
 function lcshSuggestion(inputId, suggestion) {
-    $('' + inputId + '').setValue(unescape('' + suggestion + ''));
-    $('' + inputId + '-lcsh-suggest').remove()
+    $(inputId).setValue(unescape(suggestion));
+    $(inputId + '-lcsh-suggest').remove()
 }
 // Observe any keyup events from all Dublin Core:Subject form inputs.
 document.observe('omeka:elementformload', function(e) {
