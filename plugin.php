@@ -46,7 +46,7 @@ document.observe('omeka:elementformload', function(e) {
                     }
                     // Insert the suggest div if it doesn't already exist.
                     if (!$(input.id + '-lcsh-suggest')) {
-                        var suggestDiv = new Element('div', {id: input.id + '-lcsh-suggest', class: 'lcsh-suggest'});
+                        var suggestDiv = new Element('div', {id: input.id + '-lcsh-suggest', 'class': 'lcsh-suggest'});
                         input.insert({after: suggestDiv});
                     }
                     // Update the suggest div with the suggestion HTML.
