@@ -7,9 +7,8 @@ class Lcsh_IndexController extends Omeka_Controller_Action
     {
         $client = new Zend_Http_Client();
         $client->setUri(self::LCSH_SUGGEST_URL);
-        $client->setParameterGet('q', $this->getRequest()->getParam('q'));
+        $client->setParameterGet('q', $this->getRequest()->getParam('term'));
         $json = json_decode($client->request()->getBody());
-        header('X-JSON: (' . json_encode($json) . ')');
-        exit;
+        $this->_helper->json($json[1]);
     }
 }
