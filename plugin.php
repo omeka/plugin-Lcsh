@@ -24,7 +24,7 @@ class LcshPlugin
     overflow-y: auto;
 }
 </style>
-<script type="text/javascript">
+<?php __v()->headScript()->captureStart(); ?>
 // Add an autocompleter to all Dublin Core:Subject form inputs.
 jQuery(document).bind('omeka:elementformload', function(event) {
     jQuery('#element-<?php echo $dcSubject->id; ?> input[type="text"]').autocomplete({
@@ -32,7 +32,7 @@ jQuery(document).bind('omeka:elementformload', function(event) {
         source: <?php echo js_escape(uri('lcsh/index/lcsh-proxy/')); ?>
     });
 });
-</script>
+<?php __v()->headScript()->captureEnd(); ?>
 <?php
     }
 
